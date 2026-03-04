@@ -39,4 +39,8 @@ public class DbWarehouse {
     warehouse.archivedAt = this.archivedAt;
     return warehouse;
   }
+
+  public LocalDateTime getArchivedAt() {
+    return archivedAt;
+  }
 }

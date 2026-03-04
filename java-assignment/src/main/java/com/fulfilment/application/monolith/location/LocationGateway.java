@@ -1,11 +1,15 @@
 package com.fulfilment.application.monolith.location;
 
-import com.fulfilment.application.monolith.warehouses.domain.models.Location;
-import com.fulfilment.application.monolith.warehouses.domain.ports.LocationResolver;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.fulfilment.application.monolith.warehouses.domain.models.Location;
+import com.fulfilment.application.monolith.warehouses.domain.ports.LocationResolver;
+
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
 public class LocationGateway implements LocationResolver {
 
   private static final List<Location> locations = new ArrayList<>();
@@ -23,19 +27,19 @@ public class LocationGateway implements LocationResolver {
 
   @Override
   public Location resolveByIdentifier(String identifier) {
-    // TODO implement this method
     if (identifier == null || identifier.isBlank()) {
-      throw new RuntimeException("Location identifier can not be null or blank: " + identifier);
+      throw new IllegalArgumentException(
+          "Location identifier can not be null or blank: " + identifier);
     }
 
     String normalizedIdentifier = identifier.strip();
 
     return locations.stream()
-            .filter(location -> location.identification.equalsIgnoreCase(normalizedIdentifier))
-            .findFirst()
-            .orElseThrow(() ->
-                    new NoSuchElementException("No location found for identifier: " + normalizedIdentifier))
-            ;
-
+        .filter(location -> location.identification.equalsIgnoreCase(normalizedIdentifier))
+        .findFirst()
+        .orElseThrow(
+            () ->
+                new NoSuchElementException(
+                    "No location found for identifier: " + normalizedIdentifier));
   }
 }
